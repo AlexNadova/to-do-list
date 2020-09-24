@@ -5,6 +5,9 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
   var input = form.elements[0];
   let newListItem = document.createElement("li");
+  //for generating ids
+  let currentDate = new Date();
+  newListItem.setAttribute("id", currentDate.getTime());
   //add text from input
   newListItem.innerText = input.value;
   //clear input
