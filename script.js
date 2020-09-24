@@ -10,7 +10,7 @@ form.addEventListener("submit", (e) => {
     let currentDate = new Date();
     newListItem.setAttribute("id", currentDate.getTime());
     //add text from input
-    input.placeholder = "Type new task..."
+    input.placeholder = "Type new task...";
     newListItem.innerText = input.value;
     //clear input
     input.value = "";
@@ -24,6 +24,6 @@ form.addEventListener("submit", (e) => {
     //add item to the list
     list.appendChild(newListItem);
   } else {
-    input.placeholder = "You need to input something."
+    input.placeholder = "You need to input something.";
   }
 });
