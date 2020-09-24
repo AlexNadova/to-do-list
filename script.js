@@ -4,14 +4,13 @@ var list = document.getElementById("toDoList");
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   var input = form.elements[0];
-  //check if input contains a value - in case html required is deleted
-  if (input.validity.valueMissing) {
-    input.setCustomValidity("");
+  if (input.value !== "") {
     let newListItem = document.createElement("li");
     //for generating ids
     let currentDate = new Date();
     newListItem.setAttribute("id", currentDate.getTime());
     //add text from input
+    input.placeholder = "Type new task..."
     newListItem.innerText = input.value;
     //clear input
     input.value = "";
@@ -25,6 +24,6 @@ form.addEventListener("submit", (e) => {
     //add item to the list
     list.appendChild(newListItem);
   } else {
-    input.setCustomValidity("Please, input a value.");
+    input.placeholder = "You need to input something."
   }
 });
