@@ -15,6 +15,13 @@ form.addEventListener("submit", (e) => {
     newListItem.innerText = input.value;
     //clear input
     input.value = "";
+    //add delete button
+    var deleteBtn = document.createElement("span");
+    deleteBtn.addEventListener("click", (e) => {
+      list.removeChild(newListItem);
+    });
+    deleteBtn.innerText = "X";
+    newListItem.appendChild(deleteBtn);
     //add item to the list
     list.appendChild(newListItem);
   } else {
