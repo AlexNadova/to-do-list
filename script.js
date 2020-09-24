@@ -27,3 +27,25 @@ form.addEventListener("submit", (e) => {
     input.placeholder = "You need to input something.";
   }
 });
+
+var navItems = document.getElementsByClassName("nav__item");
+for (let i = 0; i < navItems.length; i++) {
+  navItems[i].addEventListener("click", (e) => {
+    let newEvent = new CustomEvent("changeContentEvent", {
+      detail: { title: navItems[i].textContent },
+    });
+    document.dispatchEvent(newEvent);
+  });
+}
+
+var title = document.querySelector("h1.title");
+
+function changeTitle(event) {
+  title.textContent = "MY " + event.detail.title;
+}
+function changeContent(event) {
+  list.innerHTML = "";
+}
+
+document.addEventListener("changeContentEvent", changeContent);
+document.addEventListener("changeContentEvent", changeTitle);
