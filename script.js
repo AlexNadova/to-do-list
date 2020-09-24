@@ -49,3 +49,23 @@ function changeContent(event) {
 
 document.addEventListener("changeContentEvent", changeContent);
 document.addEventListener("changeContentEvent", changeTitle);
+
+var nav = document.querySelector(".nav__container");
+var navOpen = document.querySelector(".nav__open");
+document.addEventListener("click", (e) => {
+  if (e.target == nav) {
+    nav.style.display = "none";
+    navOpen.style.display = "block";
+  }
+});
+document.querySelector(".nav>span").addEventListener("click", (e) => {
+  nav.style.display = "none";
+  navOpen.style.display = "block";
+});
+navOpen.addEventListener("click", (e) => {
+  nav.style.display = "block";
+  navOpen.style.display = "none";
+});
+
+//refactor code
+//save items (db, storage??)
