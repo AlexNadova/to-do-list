@@ -1,13 +1,18 @@
 var form = document.getElementById("toDoForm");
 var list = document.getElementById("toDoList");
 var storage = window.localStorage;
+var listName = "TO-DO LIST";
 
 //load items from local storage----------------------------------------------------
-var todoStorage = storage.getItem("todo");
-if (todoStorage) {
-  todoStorage = JSON.parse(todoStorage);
-  for (let i = 0; i < todoStorage.length; i++) {
-    addItemToList(todoStorage[i].id, todoStorage[i].value);
+var storageList = storage.getItem(listName);
+if (storageList) {
+  storageList = JSON.parse(storageList);
+  loadListOfItems(storageList);
+}
+
+function loadListOfItems(listOfItems) {
+  for (let i = 0; i < listOfItems.length; i++) {
+    addItemToList(listOfItems[i].id, listOfItems[i].value);
   }
 }
 
@@ -28,6 +33,14 @@ function changeTitle(event) {
 }
 function changeContent(event) {
   list.innerHTML = "";
+  listName = event.detail.title;
+  storageList = storage.getItem(listName);
+  if (storageList) {
+    storageList = JSON.parse(storageList);
+    loadListOfItems(storageList);
+  } else {
+    storageList = [];
+  }
 }
 
 document.addEventListener("changeContentEvent", changeContent);
@@ -64,12 +77,13 @@ form.addEventListener("submit", (e) => {
   var input = form.elements[0];
   if (input.value !== "") {
     let id = generateId();
-    if (!todoStorage) {
-      todoStorage = [];
+    if (!storageList) {
+      storageList = [];
     }
-    todoStorage.push({ id: id, value: input.value });
+    storageList.push({ id: id, value: input.value });
     addItemToList(id, input.value);
-    storage.setItem("todo", JSON.stringify(todoStorage));
+    storage.setItem(listName, JSON.stringify(storageList));
+
     //clear input
     input.placeholder = "Type new task...";
     input.value = "";
@@ -87,10 +101,10 @@ function createDeleteButton(listItem) {
   var deleteBtn = document.createElement("span");
   deleteBtn.addEventListener("click", (e) => {
     list.removeChild(listItem);
-    for (let i = 0; i < todoStorage.length; i++) {
-      if (todoStorage[i].id == listItem.getAttribute("id")) {
-        todoStorage.splice(i, 1);
-        storage.setItem("todo", JSON.stringify(todoStorage));
+    for (let i = 0; i < storageList.length; i++) {
+      if (storageList[i].id == listItem.getAttribute("id")) {
+        storageList.splice(i, 1);
+        storage.setItem(listName, JSON.stringify(storageList));
         break;
       }
     }
