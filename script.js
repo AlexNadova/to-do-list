@@ -1,33 +1,7 @@
 var form = document.getElementById("toDoForm");
 var list = document.getElementById("toDoList");
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  var input = form.elements[0];
-  if (input.value !== "") {
-    let newListItem = document.createElement("li");
-    //for generating ids
-    let currentDate = new Date();
-    newListItem.setAttribute("id", currentDate.getTime());
-    //add text from input
-    input.placeholder = "Type new task...";
-    newListItem.innerText = input.value;
-    //clear input
-    input.value = "";
-    //add delete button
-    var deleteBtn = document.createElement("span");
-    deleteBtn.addEventListener("click", (e) => {
-      list.removeChild(newListItem);
-    });
-    deleteBtn.innerText = "X";
-    newListItem.appendChild(deleteBtn);
-    //add item to the list
-    list.appendChild(newListItem);
-  } else {
-    input.placeholder = "You need to input something.";
-  }
-});
-
+//change view when nav btn is clicked event created---------------------------------
 var navItems = document.getElementsByClassName("nav__item");
 for (let i = 0; i < navItems.length; i++) {
   navItems[i].addEventListener("click", (e) => {
@@ -38,9 +12,8 @@ for (let i = 0; i < navItems.length; i++) {
   });
 }
 
-var title = document.querySelector("h1.title");
-
 function changeTitle(event) {
+  let title = document.querySelector("h1.title");
   title.textContent = "MY " + event.detail.title;
 }
 function changeContent(event) {
@@ -50,22 +23,68 @@ function changeContent(event) {
 document.addEventListener("changeContentEvent", changeContent);
 document.addEventListener("changeContentEvent", changeTitle);
 
+//hide/show navigation---------------------------------------------------------------
 var nav = document.querySelector(".nav__container");
 var navOpen = document.querySelector(".nav__open");
 document.addEventListener("click", (e) => {
   if (e.target == nav) {
-    nav.style.display = "none";
-    navOpen.style.display = "block";
+    hideNav();
   }
 });
+
 document.querySelector(".nav>span").addEventListener("click", (e) => {
-  nav.style.display = "none";
-  navOpen.style.display = "block";
+  hideNav();
 });
 navOpen.addEventListener("click", (e) => {
-  nav.style.display = "block";
-  navOpen.style.display = "none";
+  showNav();
 });
 
-//refactor code
-//save items (db, storage??)
+function hideNav() {
+  nav.style.display = "none";
+  navOpen.style.display = "block";
+}
+function showNav() {
+  nav.style.display = "block";
+  navOpen.style.display = "none";
+}
+
+//submit form-----------------------------------------------------------------------
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  var input = form.elements[0];
+  if (input.value !== "") {
+    addItemToList(generateId(), input.value);
+
+    //clear input
+    input.placeholder = "Type new task...";
+    input.value = "";
+  } else {
+    input.placeholder = "You need to input something.";
+  }
+});
+
+function generateId() {
+  let currentDate = new Date();
+  return currentDate.getTime();
+}
+
+function createDeleteButton(listItem) {
+  var deleteBtn = document.createElement("span");
+  deleteBtn.addEventListener("click", (e) => {
+    list.removeChild(listItem);
+  });
+  deleteBtn.innerText = "X";
+  return deleteBtn;
+}
+
+function addItemToList(id, value) {
+  let newListItem = document.createElement("li");
+  newListItem.setAttribute("id", id);
+  newListItem.innerText = value;
+
+  //add delete button
+  newListItem.appendChild(createDeleteButton(newListItem));
+
+  //add item to the list
+  list.appendChild(newListItem);
+}
