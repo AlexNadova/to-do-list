@@ -1,5 +1,15 @@
 var form = document.getElementById("toDoForm");
 var list = document.getElementById("toDoList");
+var storage = window.localStorage;
+
+//load items from local storage----------------------------------------------------
+var todoStorage = storage.getItem("todo");
+if (todoStorage) {
+  todoStorage = JSON.parse(todoStorage);
+  for (let i = 0; i < todoStorage.length; i++) {
+    addItemToList(todoStorage[i].id, todoStorage[i].value);
+  }
+}
 
 //change view when nav btn is clicked event created---------------------------------
 var navItems = document.getElementsByClassName("nav__item");
@@ -53,8 +63,13 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
   var input = form.elements[0];
   if (input.value !== "") {
-    addItemToList(generateId(), input.value);
-
+    let id = generateId();
+    if (!todoStorage) {
+      todoStorage = [];
+    }
+    todoStorage.push({ id: id, value: input.value });
+    addItemToList(id, input.value);
+    storage.setItem("todo", JSON.stringify(todoStorage));
     //clear input
     input.placeholder = "Type new task...";
     input.value = "";
@@ -72,6 +87,13 @@ function createDeleteButton(listItem) {
   var deleteBtn = document.createElement("span");
   deleteBtn.addEventListener("click", (e) => {
     list.removeChild(listItem);
+    for (let i = 0; i < todoStorage.length; i++) {
+      if (todoStorage[i].id == listItem.getAttribute("id")) {
+        todoStorage.splice(i, 1);
+        storage.setItem("todo", JSON.stringify(todoStorage));
+        break;
+      }
+    }
   });
   deleteBtn.innerText = "X";
   return deleteBtn;
